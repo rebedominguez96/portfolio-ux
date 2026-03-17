@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBVA Mobile App Redesign — UX Audit & Product Redesign Case Study</title>
+<meta name="description" content="Product redesign exploration of the BBVA mobile banking app based on heuristic UX analysis. Focused on improving hierarchy, readability and interaction feedback in fintech mobile experiences.">
+<meta name="keywords" content="product design, ux audit, fintech ux, mobile app redesign, heuristic analysis, product designer portfolio">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#FBF8F3;--text:#2A2234;--text-light:#6B5E7B;--text-muted:#9389A0;
+  --warm:#D4896A;--peach:#E8A990;--lav:#9BA4C7;--sand:#D6C5A8;--rose:#C5868A;
+  --card:#FFFFFF;--card-alt:#F5F1EC;--border:rgba(42,34,52,.06);
+  --nav:rgba(251,248,243,.88);--r:16px;--r-sm:10px;
+  --s1:0 1px 4px rgba(42,34,52,.04);--s2:0 6px 24px rgba(42,34,52,.06);--s3:0 12px 40px rgba(42,34,52,.09);
+  --max:960px;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--border)}
+.nav-in{max-width:var(--max);margin:0 auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between}
+.nav-back{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);font-size:.88rem;font-weight:500;transition:color .3s}
+.nav-back:hover{color:var(--warm)}
+.nav-back svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav-logo{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--text);text-decoration:none}
+.nav-logo span{color:var(--warm)}
+
+.case-hero{padding:120px 28px 56px;text-align:center}
+.case-hero-in{max-width:var(--max);margin:0 auto}
+.case-tag{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--warm);font-weight:500;margin-bottom:14px}
+.case-title{font-family:'DM Serif Display',serif;font-size:clamp(2.2rem,5vw,3.2rem);font-weight:400;line-height:1.1;margin-bottom:12px}
+.case-subtitle{font-size:1.08rem;color:var(--text-light);max-width:580px;margin:0 auto 32px;line-height:1.65}
+.case-meta{display:flex;justify-content:center;gap:32px;flex-wrap:wrap}
+.case-meta-item{text-align:center}
+.case-meta-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px}
+.case-meta-val{font-size:.9rem;font-weight:600}
+
+.case-cover{max-width:var(--max);margin:0 auto 0;padding:0 28px}
+.case-cover-img{width:100%;height:360px;border-radius:var(--r);background:linear-gradient(135deg,#D4DBE8,#E2DDD4,#D8D4E2);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:.9rem;font-weight:500;box-shadow:var(--s2)}
+
+.case-section{max-width:var(--max);margin:0 auto;padding:52px 28px}
+.cs-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--warm);font-weight:500;margin-bottom:8px}
+.cs-title{font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,2.5vw,1.9rem);font-weight:400;margin-bottom:16px;line-height:1.2}
+.cs-text{font-size:.95rem;color:var(--text-light);max-width:640px;line-height:1.7}
+.cs-text+.cs-text{margin-top:12px}
+.cs-divider{max-width:var(--max);margin:0 auto;padding:0 28px}
+.cs-divider hr{border:none;border-top:1px solid var(--border)}
+
+.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:28px}
+.metrics.col3{grid-template-columns:repeat(3,1fr)}
+.metric{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;text-align:center;transition:transform .3s,box-shadow .3s}
+.metric:hover{transform:translateY(-3px);box-shadow:var(--s2)}
+.metric-val{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--warm);line-height:1;margin-bottom:6px}
+.metric-desc{font-size:.82rem;color:var(--text-light);line-height:1.5}
+
+.insights{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+.insight{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
+.insight:hover{transform:translateY(-3px);box-shadow:var(--s2)}
+.insight-num{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--warm);opacity:.25;position:absolute;top:14px;right:18px;line-height:1}
+.insight-title{font-size:.92rem;font-weight:700;margin-bottom:6px;line-height:1.3;padding-right:30px}
+.insight-text{font-size:.84rem;color:var(--text-light);line-height:1.6}
+
+.strategy-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+.strat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:22px;text-align:center;transition:transform .3s,box-shadow .3s}
+.strat:hover{transform:translateY(-3px);box-shadow:var(--s2)}
+.strat-icon{font-size:1.6rem;margin-bottom:10px}
+.strat-title{font-size:.88rem;font-weight:700;margin-bottom:6px;line-height:1.3}
+.strat-text{font-size:.8rem;color:var(--text-light);line-height:1.6}
+
+.decisions{margin-top:24px;display:flex;flex-direction:column;gap:12px}
+.decision{background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);padding:20px 24px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
+.decision-marker{width:8px;height:8px;border-radius:50%;background:var(--warm);margin-top:7px;flex-shrink:0}
+.decision-title{font-size:.9rem;font-weight:700;margin-bottom:3px}
+.decision-text{font-size:.84rem;color:var(--text-light);line-height:1.6}
+
+.hmw{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;margin-top:24px;border-left:4px solid var(--warm)}
+.hmw-label{font-family:'JetBrains Mono',monospace;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--warm);font-weight:500;margin-bottom:8px}
+.hmw-text{font-size:1rem;font-weight:500;line-height:1.6;font-style:italic}
+
+.audit-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.audit-tag{padding:8px 18px;border-radius:50px;background:var(--card);border:1px solid var(--border);font-size:.82rem;font-weight:500;color:var(--text)}
+
+.moment-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+.moment{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;transition:transform .3s,box-shadow .3s}
+.moment:hover{transform:translateY(-3px);box-shadow:var(--s2)}
+.moment-num{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--warm);margin-bottom:6px}
+.moment-title{font-size:.92rem;font-weight:700;margin-bottom:6px;line-height:1.3}
+.moment-text{font-size:.84rem;color:var(--text-light);line-height:1.6}
+
+.micro-block{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;margin-top:24px}
+.micro-steps{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.micro-step{padding:8px 16px;border-radius:50px;background:var(--card-alt);font-size:.82rem;font-weight:600;white-space:nowrap}
+.micro-arrow{color:var(--text-muted);font-size:.9rem}
+.micro-note{font-size:.84rem;color:var(--text-light);line-height:1.6}
+
+.proto-placeholder{width:100%;height:320px;border-radius:var(--r);background:linear-gradient(135deg,#EDE7DF,#DDE1EB);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:.88rem;font-weight:500;margin-top:24px;box-shadow:var(--s1)}
+
+.learnings{margin-top:24px}
+.learning-quote{font-family:'DM Serif Display',serif;font-size:clamp(1.2rem,2vw,1.5rem);line-height:1.4;color:var(--text);margin-bottom:24px;padding-left:20px;border-left:3px solid var(--warm)}
+.learning-list{display:flex;flex-direction:column;gap:10px}
+.learning-item{display:flex;align-items:start;gap:10px;font-size:.88rem;color:var(--text-light);line-height:1.6}
+.learning-dot{width:6px;height:6px;border-radius:50%;background:var(--lav);margin-top:8px;flex-shrink:0}
+
+.impact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:24px}
+.impact-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;text-align:center;transition:transform .3s,box-shadow .3s}
+.impact-card:hover{transform:translateY(-3px);box-shadow:var(--s2)}
+.impact-icon{font-size:1.4rem;margin-bottom:8px}
+.impact-label{font-size:.84rem;font-weight:600;line-height:1.4}
+
+.case-cta{max-width:var(--max);margin:0 auto;padding:40px 28px 60px;text-align:center}
+.case-cta a{display:inline-flex;align-items:center;gap:7px;padding:13px 28px;border-radius:50px;text-decoration:none;font-weight:600;font-size:.88rem;background:var(--warm);color:#fff;box-shadow:0 4px 16px rgba(212,137,106,.25);transition:all .3s}
+.case-cta a:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,137,106,.35)}
+
+@media(max-width:700px){
+  .metrics,.metrics.col3,.strategy-cards,.impact-grid,.moment-grid{grid-template-columns:1fr}
+  .insights{grid-template-columns:1fr}
+  .case-meta{gap:20px}
+  .micro-steps{flex-direction:column;align-items:flex-start}.micro-arrow{transform:rotate(90deg)}
+}
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-in">
+    <a href="portfolio.html" class="nav-back">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </a>
+    <a href="portfolio.html" class="nav-logo">Rebecca<span>.</span></a>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<header class="case-hero">
+  <div class="case-hero-in">
+    <p class="case-tag">Mobile App · Fintech · UX Audit · Product Redesign</p>
+    <h1 class="case-title">BBVA Mobile App Redesign</h1>
+    <p class="case-subtitle">Simplifying financial clarity through UX structure. A heuristic audit and redesign exploration focused on hierarchy, readability and interaction feedback.</p>
+    <div class="case-meta">
+      <div class="case-meta-item">
+        <p class="case-meta-label">Role</p>
+        <p class="case-meta-val">Product Designer</p>
+      </div>
+      <div class="case-meta-item">
+        <p class="case-meta-label">Team</p>
+        <p class="case-meta-val">Solo Project</p>
+      </div>
+      <div class="case-meta-item">
+        <p class="case-meta-label">Platform</p>
+        <p class="case-meta-val">Mobile App</p>
+      </div>
+      <div class="case-meta-item">
+        <p class="case-meta-label">Focus</p>
+        <p class="case-meta-val">UX Audit + Redesign</p>
+      </div>
+      <div class="case-meta-item">
+        <p class="case-meta-label">Sprint</p>
+        <p class="case-meta-val">5 days</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- COVER -->
+<div class="case-cover">
+  <div class="case-cover-img">📱 Before / After mockups placeholder</div>
+</div>
+
+<!-- ========== KEY UX METRICS ========== -->
+<section class="case-section reveal">
+  <p class="cs-label">Key Findings</p>
+  <h2 class="cs-title">What the heuristic analysis revealed</h2>
+  <div class="metrics">
+    <div class="metric">
+      <p class="metric-val">72%</p>
+      <p class="metric-desc">Screen elements competing for visual attention simultaneously</p>
+    </div>
+    <div class="metric">
+      <p class="metric-val">+3 Steps</p>
+      <p class="metric-desc">Required to reach detailed transaction information</p>
+    </div>
+    <div class="metric">
+      <p class="metric-val">High</p>
+      <p class="metric-desc"><strong>Cognitive load</strong> — dense layouts slow down financial scanning</p>
+    </div>
+    <div class="metric">
+      <p class="metric-val">Low</p>
+      <p class="metric-desc"><strong>Interaction feedback</strong> — minimal response when tapping transaction elements</p>
+    </div>
+  </div>
+</section>
+
+<div class="cs-divider"><hr></div>
+
+<!-- ========== CONTEXT ========== -->
+<section class="case-section reveal">
+  <p class="cs-label">Context</p>
+  <h2 class="cs-title">When financial apps become visually complex</h2>
+  <p class="cs-text">Financial apps accumulate features over time. Interfaces become dense and visually competitive. Users often open banking apps with a single goal: <strong>quickly understand their finances</strong>.</p>
+  <p class="cs-text">This project explores how UX structure can simplify financial perception — without removing functionality.</p>
+  <div class="hmw">
+    <p class="hmw-label">How Might We</p>
+    <p class="hmw-text">Reduce cognitive load in the banking interface so users can quickly understand their financial situation?</p>
+  </div>
+</section>
+
+<div class="cs-divider"><hr></div>
+
+<!-- ========== UX AUDIT ========== -->
+<section class="case-section reveal">
+  <p class="cs-label">UX Audit</p>
+  <h2 class="cs-title">Heuristic analysis as the foundation for redesign</h2>
+  <p class="cs-text">The redesign started with a structured heuristic usability analysis across five key dimensions.</p>
+  <div class="audit-list">
+    <span class="audit-tag">Visual Hierarchy</span>
+    <span class="audit-tag">Information Density</span>
+    <span class="audit-tag">Interaction Feedback</span>
+    <span class="audit-tag">Accessibility & Contrast</span>
+    <span class="audit-tag">Navigation Clarity</span>
+  </div>
+  <div class="proto-placeholder" style="height:240px;margin-top:24px">📋 Heuristic evaluation matrix placeholder</div>
+</section>
+
+<div class="cs-divider"><hr></div>
+
+<!-- ========== KEY UX INSIGHTS ========== -->
+<section class="case-section reveal">
+  <p class="cs-label">Key Insights</p>
+  <h2 class="cs-title">Three findings that shaped the redesign direction</h2>
+  <div class="insights">
+    <div class="insight">
+      <span class="insight-num">01</span>
+      <h3 class="insight-title">Financial information lacked clear hierarchy</h3>
+      <p class="insight-text">Balance, recent transactions and secondary UI components competed visually — making it harder to scan financial information quickly.</p>
+    </div>
+    <div class="insight">
+      <span class="insight-num">02</span>
+      <h3 class="insight-title">Transaction lists increased cognitive load</h3>
+      <p class="insight-text">Dense layouts and minimal spacing made transaction scanning slower than necessary for routine financial checks.</p>
+    </div>
+    <div class="insight">
+      <span class="insight-num">03</span>
+      <h3 class="insight-title">Lack of interaction feedback reduced trust</h3>
+      <p class="insight-text">Minimal visual confirmation when tapping elements created uncertainty during interaction — critical in financial contexts.</p>
+    </div>
+  </div>
+</section>
+
+<div class="cs-divider"><hr></div>
+
+<!-- ========== PRODUCT OPPORTUNITY ========== -->
+<section class="case-section reveal">
+  <p class="cs-label">Product Opportunity</p>
+  <h2 class="cs-title">Restructure, don't add — improve the existing experience</h2>
+  <div class="decisions">
+    <div class="decision">
+      <div class="decision-marker"></div>
+      <div>
+        <h3 class="decision-title">Improve visual hierarchy</h3>
+        <p class="decision-text">Make balance and key financial data immediately dominant in the visual structure.</p>
+      </div>
+    </div>
+    <div class="decision">
+      <div class="decision-marker"></div>
+      <div>
+        <h3 class="decision-title">Reduce cognitive load</h3>
+        <p class="decision-text">Simplify transaction scanning through better spacing, grouping and typography hierarchy.</p>
+      </div>
+    </div>
+    <div class="decision">
+      <div class="decision-marker"></div>
+      <div>
+        <h3 class="decision-title">Strengthen interaction feedback</h3>
+        <p class="decision-text">Add subtle micro-interactions that confirm user actions and build trust in every tap.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cs-divider"><hr></div>
+
+<!-- ========== PRODUCT PRINCIPLES ========== -->
+<section class="case-section reveal">
+  <p class="cs-label">Product Principles</p>
+  <h2 class="cs-title">Three principles guiding every design decision</h2>
+  <div class="strategy-cards">
+    <div class="strat">
+      <div class="strat-icon">👁️</div>
+      <h3 class="strat-title">Clarity Over Density</h3>
+      <p class="strat-text">Financial information must be immediately readable without visual competition.</p>
+    </div>
+    <div class="strat">
+      <div class="strat-icon">🎯</div>
+      <h3 class="strat-title">Key Information First</h3>
+      <p class="strat-text">Balance and recent transactions should dominate the visual hierarchy at all times.</p>
+    </div>
+    <div class="strat">
+      <div class="strat-icon">✅</div>
+      <h3 class="strat-title">Feedback Builds Trust</h3>
+      <p class="strat-text">Interfaces must confirm user actions clearly — especially in financial contexts.</p>
+    </div>
+  </div>
+</section>
+
+<div class="cs-divider"><hr></div>
+
+<!-- ========== EXPERIENCE FOCUS ========== -->
+<section class="case-section reveal">
+  <p class="cs-label">Experience Focus</p>
+  <h2 class="cs-title">Two moments that matter most to users</h2>
+  <p class="cs-text">The redesign focused on the two most frequent user intentions when opening a banking app.</p>
+  <div class="moment-grid">
+    <div class="moment">
+      <p class="moment-num">1</p>
+      <h3 class="moment-title">Checking financial status</h3>
+      <p class="moment-text">Balance and recent activity — the first thing users look for. The redesign makes this information visually dominant and scannable in under 3 seconds.</p>
+    </div>
+    <div class="moment">
+      <p class="moment-num">2</p>
+      <h3 class="moment-title">Exploring transaction details</h3>
+      <p class="moment-text">Understanding specific transactions. The redesign reduces steps to access details and improves readability with better spacing and grouping.</p>
+    </div>
+  </div>
+</section>
+
+<div class="cs-divider"><hr></div>
+
+<!-- ========== REDESIGN STRATEGY ========== -->
+<section class="case-section reveal">
+  <p class="cs-label">Redesign Strategy</p>
+  <h2 class="cs-title">Three areas of structural improvement</h2>
+  <div class="strategy-cards">
+    <div class="strat">
+      <div class="strat-icon">📊</div>
+      <h3 class="strat-title">Clearer Visual Hierarchy</h3>
+      <p class="strat-text">Balance and key financial data become visually dominant through size, weight and spatial positioning.</p>
+    </div>
+    <div class="strat">
+      <div class="strat-icon">📋</div>
+      <h3 class="strat-title">Improved Transaction Readability</h3>
+      <p class="strat-text">Better spacing, date grouping and typography hierarchy make scanning faster and more natural.</p>
+    </div>
+    <div class="strat">
+      <div class="strat-icon">✨</div>
+      <h3 class="strat-title">Interaction Microfeedback</h3>
+      <p class="strat-text">Subtle animations provide confirmation when interacting with transaction items and financial elements.</p>
+    </div>
+  </div>
+  <div class="proto-placeholder">📱 Before / After comparison placeholder</div>
+</section>
+
+<div class="cs-divider"><hr></div>
+
+<!-- ========== MICROINTERACTIONS ========== -->
+<section class="case-section reveal">
+  <p class="cs-label">Microinteractions</p>
+  <h2 class="cs-title">Small details that build confidence</h2>
+  <div class="micro-block">
+    <div class="micro-steps">
+      <span class="micro-step">Tap transaction</span>
+      <span class="micro-arrow">→</span>
+      <span class="micro-step">Highlight on tap</span>
+      <span class="micro-arrow">→</span>
+      <span class="micro-step">Scale 1 → 0.98 → 1</span>
+      <span class="micro-arrow">→</span>
+      <span class="micro-step">Smooth detail transition</span>
+    </div>
+    <p class="micro-note">In financial interfaces, microinteractions are not decorative — they are <strong>functional trust signals</strong>. Every tap that receives visual confirmation reduces uncertainty and increases perceived reliability of the product.</p>
+  </div>
+  <div class="proto-placeholder" style="height:240px">🎬 Microinteraction animation placeholder</div>
+</section>
+
+<div class="cs-divider"><hr></div>
+
+<!-- ========== KEY LEARNINGS ========== -->
+<section class="case-section reveal">
+  <p class="cs-label">Key Learnings</p>
+  <h2 class="cs-title">What this project confirmed</h2>
+  <div class="learnings">
+    <p class="learning-quote">Design often improves products by reorganizing complexity — not by adding features.</p>
+    <div class="learning-list">
+      <div class="learning-item"><div class="learning-dot"></div><span>Clarity builds trust in financial products</span></div>
+      <div class="learning-item"><div class="learning-dot"></div><span>Interaction feedback reduces uncertainty in every tap</span></div>
+      <div class="learning-item"><div class="learning-dot"></div><span>The best redesigns restructure what exists rather than inventing from scratch</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="cs-divider"><hr></div>
+
+<!-- ========== POTENTIAL IMPACT ========== -->
+<section class="case-section reveal">
+  <p class="cs-label">Potential Impact</p>
+  <h2 class="cs-title">What structured clarity could unlock</h2>
+  <div class="impact-grid">
+    <div class="impact-card">
+      <div class="impact-icon">⚡</div>
+      <p class="impact-label">Faster transaction scanning</p>
+    </div>
+    <div class="impact-card">
+      <div class="impact-icon">🧠</div>
+      <p class="impact-label">Lower cognitive load</p>
+    </div>
+    <div class="impact-card">
+      <div class="impact-icon">🤝</div>
+      <p class="impact-label">Higher perceived trust</p>
+    </div>
+    <div class="impact-card">
+      <div class="impact-icon">💪</div>
+      <p class="impact-label">More confident interaction with financial data</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="case-cta">
+  <a href="portfolio.html#projects">← Back to all projects</a>
+</div>
+
+<!-- SCROLL REVEAL -->
+<script>
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+
+</body>
+</html>
